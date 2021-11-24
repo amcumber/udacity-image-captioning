@@ -47,7 +47,7 @@ class DecoderRNN(nn.Module):
         num_layers : int (default=1)
             number of lstm layers
         """
-        super().init()
+        super().__init__()
 
         self.embed_size = embed_size
         self.hidden_size = hidden_size
