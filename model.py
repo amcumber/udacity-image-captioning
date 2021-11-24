@@ -65,7 +65,6 @@ class DecoderRNN(nn.Module):
         self.fc = nn.Linear(hidden_size, vocab_size)
 
         # Distribute weights
-        self.lstm.weight.data.uniform_(-1, 1)
         self.fc.weight.data.uniform_(-1, 1)
 
     def forward(self, features, captions):
