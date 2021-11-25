@@ -24,7 +24,10 @@ class EncoderCNN(nn.Module):
 
 
 class DecoderRNN(nn.Module):
-    """Decoding RNN for project"""
+    """
+    Test Caption Model for the Decoding RNN portion of for the image captioning
+    project
+    """
 
     def __init__(
         self,
@@ -39,11 +42,11 @@ class DecoderRNN(nn.Module):
         Parameters
         ----------
         embed_size : int
-            number of embeddings (output of Encoder)
+            number of embeddings (standard length of input vector to lstm)
         hidden_size : int
             size of hidden layer
         vocab_size : int
-            size of vocabulary
+            size of vocabulary (output of Encoder)
         num_layers : int (default=1)
             number of lstm layers
         """
@@ -77,7 +80,7 @@ class DecoderRNN(nn.Module):
         x = torch.cat((features.unsqueeze(dim=1), x_embed), dim=1)
         seq_size = x.size(1)
 
-        x = x.view(batch_size, seq_size, -1)
+        x = x.contiguous().view(batch_size, seq_size, -1)
         hidden = self.init_hidden(batch_size)
 
         x, hidden = self.lstm(x, hidden)
