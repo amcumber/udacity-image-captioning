@@ -83,7 +83,7 @@ class DecoderRNN(nn.Module):
         hidden = self.init_hidden(batch_size)
 
         x, hidden = self.lstm(x, hidden)
-        x = x.contiguous().view(batch_size, -1)
+        # x = x.contiguous().view(batch_size, -1, self.hidden_size)
         # x = self.drop(x)
         x = self.fc(x)
         x = F.log_softmax(x, dim=1)
