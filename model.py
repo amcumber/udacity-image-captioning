@@ -76,6 +76,8 @@ class DecoderRNN(nn.Module):
         # CITATION: Udacity Computer Vision - LSTM notebook
         batch_size = features.size(0)
         x_embed = self.embedding(captions)  # 10, 14, 256
+        # remove <end> tag
+        x_embed = x_embed[:, :-1, :]
         x = torch.cat((features.unsqueeze(dim=1), x_embed), dim=1)
         seq_size = x.size(1)
 
