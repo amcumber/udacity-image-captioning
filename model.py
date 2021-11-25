@@ -54,6 +54,7 @@ class DecoderRNN(nn.Module):
         self.vocab_size = vocab_size
         self.num_layers = num_layers
         self.p_drop = p_drop
+        self.embedding = nn.Embedding(vocab_size, embed_size)
         self.lstm = nn.LSTM(
             embed_size,
             hidden_size,
@@ -66,19 +67,33 @@ class DecoderRNN(nn.Module):
 
         # Distribute weights
         self.fc.weight.data.uniform_(-1, 1)
+        self.embedding.weight.data.uniform_(-1, 1)
 
     def forward(self, features, captions):
-        x = torch.cat(features).view(
-            len(features),
-            captions.shape[1],
-            -1,
-        )
-        hidden = (torch.randn(1, 1, 3), torch.randn(1, 1, 3))
+        # CITATION: Udacity Computer Vision - LSTM notebook
+        x_embed = self.embedding(captions)
+        x = torch.cat((features, x_embed))
+        x = x.view(len(features), x_embed.shape[1], -1)
+        hidden = self.init_hidden()
 
         x, hidden = self.lstm(x, hidden)
-        x = self.drop(x)
-        x = F.softmax(self.fc(x), dim=1)
+        x = x.view(len(features), -1)
+        # x = self.drop(x)
+        x = self.fc(x)
+        x = F.log_softmax(x, dim=1)
         return x
+
+    # CITATION: Udacity Computer Vision - LSTM notebook + project init
+    def init_hidden(self):
+        """At the start of training, we need to initialize a hidden state;
+        there will be none because the hidden state is formed based on perviously seen data.
+        So, this function defines a hidden state with all zeroes and of a specified size."""
+        # The axes dimensions are (n_layers, batch_size, hidden_dim)
+        # hidden = (torch.randn(1, 1, 3), torch.randn(1, 1, 3))
+        return (
+            torch.randn(1, 1, self.hidden_size),
+            torch.randn(1, 1, self.hidden_size),
+        )
 
     def sample(self, inputs, states=None, max_len=20):
         "accepts pre-processed image tensor (inputs) and returns predicted sentence (list of tensor ids of length max_len)"
