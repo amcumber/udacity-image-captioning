@@ -75,7 +75,6 @@ class DecoderRNN(nn.Module):
     def forward(self, features, captions):
         # CITATION: Udacity Computer Vision - LSTM notebook
         batch_size = features.size(0)
-        print(features.shape)  # 10, 256
         x_embed = self.embedding(captions)  # 10, 14, 256
         x = torch.cat((features.unsqueeze(dim=1), x_embed), dim=1)
         seq_size = x.size(1)
@@ -84,7 +83,7 @@ class DecoderRNN(nn.Module):
         hidden = self.init_hidden(batch_size)
 
         x, hidden = self.lstm(x, hidden)
-        x = x.view(len(features), -1)
+        x = x.contiguous().view(batch_size, -1)
         # x = self.drop(x)
         x = self.fc(x)
         x = F.log_softmax(x, dim=1)
