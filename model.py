@@ -35,7 +35,7 @@ class DecoderRNN(nn.Module):
         hidden_size,
         vocab_size,
         num_layers=1,
-        p_drop=0.2,
+        p_drop=0,
     ):
         """Constructor
 
