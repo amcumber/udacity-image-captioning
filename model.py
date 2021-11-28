@@ -60,7 +60,7 @@ class DecoderRNN(nn.Module):
         self.p_drop = p_drop
         self.embedding = nn.Embedding(vocab_size, embed_size)
         self.lstm = nn.LSTM(
-            imput_size=embed_size,
+            input_size=embed_size,
             hidden_size=hidden_size,
             num_layers=num_layers,
             batch_first=True,
