@@ -72,6 +72,8 @@ class DecoderRNN(nn.Module):
         # self.fc.weight.data.uniform_(-1, 1)
         # self.embedding.weight.data.uniform_(-1, 1)
         self.device = device
+        if device is not "cpu":
+            self.to(device)
 
     def to(self, device):
         super().to(device)
