@@ -63,7 +63,6 @@ class DecoderRNN(nn.Module):
             hidden_size,
             num_layers,
             batch_first=True,
-            dropout=p_drop,
         )
         self.drop = nn.Dropout(p_drop)
         self.fc = nn.Linear(hidden_size, vocab_size)
