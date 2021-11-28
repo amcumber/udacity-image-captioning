@@ -36,6 +36,7 @@ class DecoderRNN(nn.Module):
         vocab_size,
         num_layers=1,
         p_drop=0,
+        device="cpu",
     ):
         """Constructor
 
@@ -59,9 +60,9 @@ class DecoderRNN(nn.Module):
         self.p_drop = p_drop
         self.embedding = nn.Embedding(vocab_size, embed_size)
         self.lstm = nn.LSTM(
-            embed_size,
-            hidden_size,
-            num_layers,
+            imput_size=embed_size,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
             batch_first=True,
         )
         self.drop = nn.Dropout(p_drop)
@@ -70,6 +71,11 @@ class DecoderRNN(nn.Module):
         # Distribute weights
         self.fc.weight.data.uniform_(-1, 1)
         self.embedding.weight.data.uniform_(-1, 1)
+        self.device = device
+
+    def to(self, device):
+        super().to(device)
+        self.device = device
 
     def forward(self, features, captions):
         # CITATION: Udacity Computer Vision - LSTM notebook
@@ -102,7 +108,9 @@ class DecoderRNN(nn.Module):
         return (
             torch.randn(self.num_layers, batch_size, self.hidden_size),
             torch.randn(self.num_layers, batch_size, self.hidden_size),
-        )
+            # torch.randn(self.num_layers, batch_size, self.hidden_size),
+            # torch.randn(self.num_layers, batch_size, self.hidden_size),
+        ).to(self.device)
 
     def sample(self, inputs, states=None, max_len=20):
         """
