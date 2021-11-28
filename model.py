@@ -69,8 +69,8 @@ class DecoderRNN(nn.Module):
         self.fc = nn.Linear(hidden_size, vocab_size)
 
         # Distribute weights
-        self.fc.weight.data.uniform_(-1, 1)
-        self.embedding.weight.data.uniform_(-1, 1)
+        # self.fc.weight.data.uniform_(-1, 1)
+        # self.embedding.weight.data.uniform_(-1, 1)
         self.device = device
 
     def to(self, device):
