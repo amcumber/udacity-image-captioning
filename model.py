@@ -106,11 +106,17 @@ class DecoderRNN(nn.Module):
         """
         # The axes dimensions are (n_layers, batch_size, hidden_dim)
         return (
-            torch.randn(self.num_layers, batch_size, self.hidden_size),
-            torch.randn(self.num_layers, batch_size, self.hidden_size),
-            # torch.randn(self.num_layers, batch_size, self.hidden_size),
-            # torch.randn(self.num_layers, batch_size, self.hidden_size),
-        ).to(self.device)
+            torch.randn(
+                self.num_layers,
+                batch_size,
+                self.hidden_size,
+            ).to(self.device),
+            torch.randn(
+                self.num_layers,
+                batch_size,
+                self.hidden_size,
+            ).to(self.device),
+        )
 
     def sample(self, inputs, states=None, max_len=20):
         """
