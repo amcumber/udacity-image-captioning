@@ -1,3 +1,4 @@
+from typing import List
 import torch
 import torch.nn as nn
 from torch.nn.modules import dropout
@@ -120,9 +121,31 @@ class DecoderRNN(nn.Module):
             ).to(self.device),
         )
 
-    def sample(self, inputs, states=None, max_len=20):
+    def sample(self, inputs, states=None, max_len=20) -> List[int]:
         """
         accepts pre-processed image tensor (inputs) and returns predicted
         sentence (list of tensor ids of length max_len)
         """
-        pass
+        # CITATION: Udacity Computer Vision - LSTM notebook
+        n_dims = len(inputs.size)
+
+        features = inputs
+        if n_dims < 2:
+            features = inputs.unsqueeze(dim=0)
+        # FIXME - start here
+        
+        # x_embed = self.embedding(captions)  # 10, 14, 256
+        # # remove <end> tag
+        # x_embed = x_embed[:, :-1, :]
+        # x = torch.cat((features.unsqueeze(dim=1), x_embed), dim=1)
+        # seq_size = x.size(1)
+
+        # x = x.contiguous().view(batch_size, seq_size, -1)
+        # hidden = self.init_hidden(batch_size)
+
+        # x, hidden = self.lstm(x, hidden)
+        # # x = x.contiguous().view(batch_size, -1, self.hidden_size)
+        # # x = self.drop(x)
+        # x = self.fc(x)
+        # # x = F.log_softmax(x, dim=1)
+        # return x
