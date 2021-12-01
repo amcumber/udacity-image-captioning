@@ -2,6 +2,7 @@ from typing import List
 import torch
 import torch.nn as nn
 from torch.nn.modules import dropout
+from torch.random import seed
 import torchvision.models as models
 import torch.nn.functional as F
 
@@ -127,11 +128,13 @@ class DecoderRNN(nn.Module):
         sentence (list of tensor ids of length max_len)
         """
         # CITATION: Udacity Computer Vision - LSTM notebook
-        input_size = inputs.size(1)
-        seed_seq = torch.zeros(1, max_len - 1, input_size).to(self.device)
+        batch_size = 1
+        input_size = inputs.size(2)  # 1,1,256
+        seed_seq = torch.zeros(batch_size, max_len - 1, input_size)
+        seed_seq = seed_seq.to(self.device)
         input_w_seed = torch.cat((inputs, seed_seq), dim=1)
         x = input_w_seed.contiguous().view(1, max_len, -1)
-        hidden = self.init_hidden(1)
+        hidden = self.init_hidden(batch_size)
         x, hidden = self.lstm(x, hidden)
         x = self.fc(x)
         x = F.log_softmax(x, dim=1)
