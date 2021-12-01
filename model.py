@@ -128,15 +128,20 @@ class DecoderRNN(nn.Module):
         """
         # CITATION: Udacity Computer Vision - LSTM notebook
         batch_size = 1
-        input_size = inputs.size(2)  # 1,1,256
-        seed_seq = torch.zeros(batch_size, max_len - 1, input_size)
-        seed_seq = seed_seq.to(self.device)
-        input_w_seed = torch.cat((inputs, seed_seq), dim=1)
-        x = input_w_seed.contiguous().view(1, max_len, -1)
+        # input_size = inputs.size(2)  # 1,1,256
+        # seed_seq = torch.zeros(batch_size, max_len - 1, input_size)
+        # seed_seq = seed_seq.to(self.device)
+        # input_w_seed = torch.cat((inputs, seed_seq), dim=1)
+        # x = input_w_seed.contiguous().view(1, max_len, -1)
         hidden = self.init_hidden(batch_size)
-        x, hidden = self.lstm(x, hidden)
-        x = self.fc(x)
+        output = []
+        x = inputs
+        for _ in range(max_len):
+            x, hidden = self.lstm(x, hidden)
+            x = self.fc(x)
+            word = torch.argmax(x.squeeze(), dim=1)
+            output = output.append(int(word))
+
         # x = F.log_softmax(x, dim=1)
         # output = x.type(torch.IntTensor).squeeze().tolist()
-        output = x
         return output
