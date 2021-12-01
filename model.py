@@ -136,6 +136,7 @@ class DecoderRNN(nn.Module):
         hidden = self.init_hidden(batch_size)
         x, hidden = self.lstm(x, hidden)
         x = self.fc(x)
-        x = F.log_softmax(x, dim=1)
-        output = x.type(torch.IntTensor).squeeze().tolist()
+        # x = F.log_softmax(x, dim=1)
+        # output = x.type(torch.IntTensor).squeeze().tolist()
+        output = x
         return output
