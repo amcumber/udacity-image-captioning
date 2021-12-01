@@ -2,7 +2,6 @@ from typing import List
 import torch
 import torch.nn as nn
 from torch.nn.modules import dropout
-from torch.random import seed
 import torchvision.models as models
 import torch.nn.functional as F
 
