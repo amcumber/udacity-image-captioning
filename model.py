@@ -139,8 +139,8 @@ class DecoderRNN(nn.Module):
         for _ in range(max_len):
             x, _ = self.lstm(x, None)
             x = self.fc(x)
-            word_idx = torch.argmax(x, dim=2).item()
-            output = output.append(word_idx)
+            word_idx = torch.argmax(x, dim=2)
+            output = output.append(word_idx.item())
             x = self.embedding(word_idx)
 
         # x = F.log_softmax(x, dim=1)
