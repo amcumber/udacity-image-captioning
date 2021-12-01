@@ -133,14 +133,15 @@ class DecoderRNN(nn.Module):
         # seed_seq = seed_seq.to(self.device)
         # input_w_seed = torch.cat((inputs, seed_seq), dim=1)
         # x = input_w_seed.contiguous().view(1, max_len, -1)
-        hidden = self.init_hidden(batch_size)
+        # hidden = self.init_hidden(batch_size)
         output = []
         x = inputs
         for _ in range(max_len):
-            x, hidden = self.lstm(x, hidden)
+            x, _ = self.lstm(x, None)
             x = self.fc(x)
-            word = torch.argmax(x.squeeze(), dim=1)
-            output = output.append(int(word))
+            word_idx = torch.argmax(x, dim=2).item()
+            output = output.append(word_idx)
+            x = self.embedding(word_idx)
 
         # x = F.log_softmax(x, dim=1)
         # output = x.type(torch.IntTensor).squeeze().tolist()
