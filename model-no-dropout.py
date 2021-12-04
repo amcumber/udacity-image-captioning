@@ -135,10 +135,8 @@ class DecoderRNN(nn.Module):
         # hidden = self.init_hidden(batch_size)
         output = []
         batch_size = 1
-        if states is None:
-            hidden = self.init_hidden(batch_size)
-        else:
-            hidden = states
+        hidden = self.init_hidden(batch_size)
+        # hidden = None
         x = inputs
         for _ in range(max_len):
             x, hidden = self.lstm(x, hidden)
