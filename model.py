@@ -127,7 +127,6 @@ class DecoderRNN(nn.Module):
         sentence (list of tensor ids of length max_len)
         """
         # CITATION: Udacity Computer Vision - LSTM notebook
-        batch_size = 1
         # input_size = inputs.size(2)  # 1,1,256
         # seed_seq = torch.zeros(batch_size, max_len - 1, input_size)
         # seed_seq = seed_seq.to(self.device)
@@ -135,9 +134,12 @@ class DecoderRNN(nn.Module):
         # x = input_w_seed.contiguous().view(1, max_len, -1)
         # hidden = self.init_hidden(batch_size)
         output = []
+        batch_size = 1
+        hidden = self.init_hidden(batch_size)
+        # hidden = None
         x = inputs
         for _ in range(max_len):
-            x, _ = self.lstm(x, None)
+            x, hidden = self.lstm(x, hidden)
             x = self.fc(x)
             word_idx = torch.argmax(x, dim=2)
             output.append(word_idx.item())
