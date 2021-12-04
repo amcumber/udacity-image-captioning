@@ -130,3 +130,5 @@ dmypy.json
 
 # Temp Files
 data_loader.pkl
+*.tar.gz
+*.pkl
