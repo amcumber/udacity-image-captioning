@@ -92,11 +92,11 @@ class DecoderRNN(nn.Module):
         x = x.contiguous().view(batch_size, seq_size, -1)
         hidden = self.init_hidden(batch_size)
 
+        x = self.drop(x)
         x, hidden = self.lstm(x, hidden)
         # x = x.contiguous().view(batch_size, -1, self.hidden_size)
-        # x = self.drop(x)
         x = self.fc(x)
-        # x = F.log_softmax(x, dim=1)
+        x = F.softmax(x, dim=1)
         return x
 
     # CITATION: Udacity Computer Vision - LSTM notebook + project init
