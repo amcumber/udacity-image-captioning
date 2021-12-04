@@ -36,7 +36,7 @@ class DecoderRNN(nn.Module):
         hidden_size,
         vocab_size,
         num_layers=1,
-        p_drop=0,
+        p_drop=0.3,
         device="cpu",
     ):
         """Constructor
@@ -135,10 +135,9 @@ class DecoderRNN(nn.Module):
         # hidden = self.init_hidden(batch_size)
         output = []
         batch_size = 1
-        if states is None:
-            hidden = self.init_hidden(batch_size)
-        else:
-            hidden = states
+        hidden = states
+        # if states is None:
+        #     hidden = self.init_hidden(batch_size)
         x = inputs
         for _ in range(max_len):
             x, hidden = self.lstm(x, hidden)
