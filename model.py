@@ -36,7 +36,7 @@ class DecoderRNN(nn.Module):
         hidden_size,
         vocab_size,
         num_layers=1,
-        p_drop=0.3,
+        p_drop=0.1,
         device="cpu",
     ):
         """Constructor
@@ -93,10 +93,10 @@ class DecoderRNN(nn.Module):
         hidden = self.init_hidden(batch_size)
 
         x = self.drop(x)
-        x, hidden = self.lstm(x, hidden)
+        x, _ = self.lstm(x, hidden)
         # x = x.contiguous().view(batch_size, -1, self.hidden_size)
         x = self.fc(x)
-        x = F.softmax(x, dim=1)
+        # x = F.softmax(x, dim=1)
         return x
 
     # CITATION: Udacity Computer Vision - LSTM notebook + project init
@@ -136,8 +136,6 @@ class DecoderRNN(nn.Module):
         output = []
         batch_size = 1
         hidden = states
-        if states is None:
-            hidden = self.init_hidden(batch_size)
         x = inputs
         for _ in range(max_len):
             x, hidden = self.lstm(x, hidden)
